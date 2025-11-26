@@ -9,8 +9,6 @@ github.com/bluenviron/gortsplib/v4 v4.10.6 h1:KMvVcU21xxQQu1Jqn6D/z/FoIMn+QEKE1d
 github.com/bluenviron/gortsplib/v4 v4.10.6/go.mod h1:/7C8qoGEsIQupuVw8YnXANpqBMNBpZ+51xFreLGiN2g=
 github.com/bluenviron/mediacommon v1.12.4 h1:7VrA/W/iDB7VELquXqRjgjzUSJT3llZYgXjFN9WkByo=
 github.com/bluenviron/mediacommon v1.12.4/go.mod h1:HDyW2CzjvhYJXtdxstdFPio3G0qSocPhqkhUt/qffec=
-github.com/bobziuchkovski/digest v0.0.0-20160204210651-26857231d60c h1:oW9/rN2CXHBql6Gwqg4v1qhdDu8RrHAR835sV7zkSNc=
-github.com/bobziuchkovski/digest v0.0.0-20160204210651-26857231d60c/go.mod h1:ywjd9SVSEeBGxYVpvNYTMc/2KcEtvA29+9PegYh9ysM=
 github.com/clbanning/mxj/v2 v2.7.0 h1:WA/La7UGCanFe5NpHF0Q3DNtnCsVoxbPKuyBNHWRyME=
 github.com/clbanning/mxj/v2 v2.7.0/go.mod h1:hNiWqW14h+kc+MdF9C6/YoRfjEJoR3ou6tn/Qo+ve2s=
 github.com/coreos/go-systemd/v22 v22.3.2/go.mod h1:Y58oyj3AT4RCenI/lSvhwexgC+NSVTIJ3seZv2GcEnc=
@@ -135,8 +133,6 @@ github.com/vcaesar/keycode v0.10.1 h1:0DesGmMAPWpYTCYddOFiCMKCDKgNnwiQa2QXindVUH
 github.com/vcaesar/keycode v0.10.1/go.mod h1:JNlY7xbKsh+LAGfY2j4M3znVrGEm5W1R8s/Uv6BJcfQ=
 github.com/vcaesar/tt v0.20.1 h1:D/jUeeVCNbq3ad8M7hhtB3J9x5RZ6I1n1eZ0BJp7M+4=
 github.com/vcaesar/tt v0.20.1/go.mod h1:cH2+AwGAJm19Wa6xvEa+0r+sXDJBT0QgNQey6mwqLeU=
-github.com/xinsnake/go-http-digest-auth-client v0.6.0 h1:nrYFWDrB2F7VwYlNravXZS0nOtg9axlATH3Jns55/F0=
-github.com/xinsnake/go-http-digest-auth-client v0.6.0/go.mod h1:QK1t1v7ylyGb363vGWu+6Irh7gyFj+N7+UZzM0L6g8I=
 github.com/yuin/goldmark v1.4.0/go.mod h1:mwnBkeHKe2W/ZEtQ+71ViKU8L12m81fl3OWwC1Zlc8k=
 github.com/yusufpapurcu/wmi v1.2.4 h1:zFUKzehAFReQwLys1b/iSMl+JQGSCSjtVqQn9bBrPo0=
 github.com/yusufpapurcu/wmi v1.2.4/go.mod h1:SBZ9tNy3G9/m5Oi98Zks0QjeHVDvuK0qfxQmPyzfmi0=

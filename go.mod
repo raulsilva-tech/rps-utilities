@@ -7,12 +7,10 @@ toolchain go1.23.7
 require (
 	github.com/IOTechSystems/onvif v1.1.2
 	github.com/bluenviron/gortsplib/v4 v4.10.6
-	github.com/bobziuchkovski/digest v0.0.0-20160204210651-26857231d60c
 	github.com/go-vgo/robotgo v0.110.6
 	github.com/icholy/digest v0.1.23
 	github.com/spf13/cobra v1.9.1
 	github.com/use-go/onvif v0.0.9
-	github.com/xinsnake/go-http-digest-auth-client v0.6.0
 )
 
 require (

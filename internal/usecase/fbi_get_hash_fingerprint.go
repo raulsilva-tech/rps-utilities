@@ -31,9 +31,7 @@ func (uc *FBIGetHashFingerprintUseCase) Execute(host string, port int, user, pas
 		return output, err
 	}
 
-	var client *http.Client
-
-	client = &http.Client{
+	client := &http.Client{
 		Transport: &digest.Transport{
 			Username: user,
 			Password: password,
