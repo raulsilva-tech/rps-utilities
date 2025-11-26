@@ -34,9 +34,9 @@ func (uc *GetCapabilitiesUseCase) Execute(host string, port int, user, password 
 		// log.Println(err)
 		//logIt(fmt.Sprintf("Get Capabilities: Host %s, retornou o erro: %s", host, err.Error()))
 		return err
-		//} else {
-		// fmt.Println(gosoap.SoapMessage(readResponse(getResponse)).StringIndent())
-		//fmt.Println("success")
+		// } else {
+		// fmt.Println(gosoap.SoapMessage(readResponse(getCapabilities)).StringIndent())
+		//fmt.Println(getCapabilities)
 	}
 
 	return nil

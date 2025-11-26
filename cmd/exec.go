@@ -1,0 +1,96 @@
+/*
+Copyright © 2025 NAME HERE <EMAIL ADDRESS>
+*/
+package cmd
+
+import (
+	"fmt"
+	"log"
+	"os/exec"
+	"runtime"
+	"syscall"
+
+	"github.com/spf13/cobra"
+)
+
+const (
+	CREATE_NEW_PROCESS_GROUP = 0x00000200
+	DETACHED_PROCESS         = 0x00000008
+)
+
+// execCmd represents the exec command
+var execCmd = &cobra.Command{
+	Use:   "exec",
+	Short: "A brief description of your command",
+	Long: `A longer description that spans multiple lines and likely contains examples
+and usage of using your command. For example:
+
+Cobra is a CLI library for Go that empowers applications.
+This application is a tool to generate the needed files
+to quickly create a Cobra application.`,
+	RunE: execCommand(),
+}
+
+func init() {
+	rootCmd.AddCommand(execCmd)
+
+	execCmd.PersistentFlags().String("command", "", "comando")
+	execCmd.PersistentFlags().IntP("seconds", "s", 0, "tempo pre-execução (segundos)")
+
+	// Here you will define your flags and configuration settings.
+
+	// Cobra supports Persistent Flags which will work for this command
+	// and all subcommands, e.g.:
+	// execCmd.PersistentFlags().String("foo", "", "A help for foo")
+
+	// Cobra supports local flags which will only run when this command
+	// is called directly, e.g.:
+	// execCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+
+func execCommand() RunEFun {
+	return func(cmd *cobra.Command, args []string) error {
+		c, _ := cmd.Flags().GetString("command")
+		s, _ := cmd.Flags().GetInt("seconds")
+
+		log.Printf("Agendando execução em %d segundos: %s", s, c)
+
+		if err := runDetachedWithLog(s, c); err != nil {
+			return fmt.Errorf("erro ao iniciar background task: %w", err)
+		}
+
+		log.Println("Tarefa agendada — comando retornando imediatamente.")
+		return nil
+	}
+}
+
+func runDetachedWithLog(seconds int, task string) error {
+
+	var cmd *exec.Cmd
+
+	if runtime.GOOS == "windows" {
+
+		cmdLine := fmt.Sprintf(
+			`timeout /T %d /NOBREAK >NUL && %s`,
+			seconds, task,
+		)
+		cmd = exec.Command("cmd.exe", "/C", cmdLine)
+
+		// 🔹 Detach de verdade (processo independente)
+		cmd.SysProcAttr = &syscall.SysProcAttr{
+			CreationFlags: CREATE_NEW_PROCESS_GROUP | DETACHED_PROCESS,
+		}
+	} else {
+
+		cmdLine := fmt.Sprintf(
+			`nohup sh -c 'sleep %d && %s' &`,
+			seconds, task,
+		)
+		cmd = exec.Command("bash", "-c", cmdLine)
+	}
+
+	return cmd.Start()
+	// output, _ := cmd.CombinedOutput()
+	// fmt.Println(string(output))
+	// return nil
+}
