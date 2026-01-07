@@ -12,9 +12,9 @@ import (
 	"github.com/icholy/digest"
 )
 
-type FBIGetHashFingerprintUseCaseOutput struct {
-	Code     int    `json:"code"`
-	Response string `json:"response"`
+type Output struct {
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
 }
 
 type FBIGetHashFingerprintUseCase struct{}
@@ -23,10 +23,10 @@ func NewFBIGetHashFingerprintUseCase() *FBIGetHashFingerprintUseCase {
 	return &FBIGetHashFingerprintUseCase{}
 }
 
-func (uc *FBIGetHashFingerprintUseCase) Execute(host string, port int, user, password, url string) (FBIGetHashFingerprintUseCaseOutput, error) {
+func (uc *FBIGetHashFingerprintUseCase) Execute(host string, port int, user, password, url string) (Output, error) {
 
 	//requere para usuario colocar o dedo no leitor
-	output, err := requireFingerprint(host, port, user, password, url)
+	output, err := digestRequest(host, port, user, password, url)
 	if output.Code != 200 || err != nil {
 		return output, err
 	}
@@ -47,7 +47,7 @@ func (uc *FBIGetHashFingerprintUseCase) Execute(host string, port int, user, pas
 	// Faça a requisição GET
 	resp, err := client.Get(eventManagerURL)
 	if err != nil {
-		return FBIGetHashFingerprintUseCaseOutput{0, err.Error()}, err
+		return Output{0, err.Error()}, err
 	}
 	defer resp.Body.Close()
 
@@ -57,9 +57,12 @@ func (uc *FBIGetHashFingerprintUseCase) Execute(host string, port int, user, pas
 	// emptyLines := 0
 	// event := make(map[string]string)
 
+	captured := false
+
+outer:
 	for scanner.Scan() {
 		line := scanner.Text()
-		fmt.Println(">>", line)
+		// fmt.Println(">>", line)
 
 		// if strings.TrimSpace(line) == "" {
 		// 	emptyLines++
@@ -73,6 +76,11 @@ func (uc *FBIGetHashFingerprintUseCase) Execute(host string, port int, user, pas
 
 		// emptyLines = 0
 
+		// if line == "Code=_FingerPrintCollect_;action=Stop;index=0" {
+		// 	base64Fingerprint = "timeout"
+		// 	break
+		// }
+
 		// Se linha tem formato "key: value"
 		if parts := strings.SplitN(line, ": ", 2); len(parts) == 2 {
 
@@ -81,6 +89,13 @@ func (uc *FBIGetHashFingerprintUseCase) Execute(host string, port int, user, pas
 			// fmt.Println("key: ", key, ", value: ", value)
 
 			switch key {
+
+			case "\"CaptureTimes\"":
+				// fmt.Printf("value: '%s'\n", value)
+				if value[0] == '2' {
+					captured = true
+				}
+
 			case "\"FingerprintData\"":
 				if len(value) < 10 {
 					base64Fingerprint = "invalid"
@@ -89,19 +104,20 @@ func (uc *FBIGetHashFingerprintUseCase) Execute(host string, port int, user, pas
 					//retirando caracteres '"' e '\'
 					base64Fingerprint = strings.ReplaceAll(value[1:len(value)-2], "\\", "")
 					//fmt.Println("size: ", len(base64Fingerprint))
-					break
+					break outer
 				}
 			case "\"Status\"":
 				if value == "\"Off\"" {
-					requireFingerprint(host, port, user, password, url)
+					// requireFingerprint(host, port, user, password, url)
 					// log.Println("OFF")
-					break
+					break outer
 				}
-			case "\"ErrorCode\"":
-				if value == "285933616" {
-					base64Fingerprint = "invalid"
-					fmt.Println("Essa digital já está cadastrada para outro usuário!")
-				}
+				// case "\"ErrorCode\"":
+				// 	if value == "285933616" {
+				// 		base64Fingerprint = "invalid"
+				// 		// fmt.Println("Essa digital já está cadastrada para outro usuário!")
+				// 		break outer
+				// 	}
 
 			}
 			if len(base64Fingerprint) == 1080 {
@@ -111,13 +127,16 @@ func (uc *FBIGetHashFingerprintUseCase) Execute(host string, port int, user, pas
 	}
 
 	if err := scanner.Err(); err != nil {
-		return FBIGetHashFingerprintUseCaseOutput{0, err.Error()}, err
+		return Output{0, err.Error()}, err
+	}
+	if !captured {
+		base64Fingerprint = "timeout"
 	}
 
-	return FBIGetHashFingerprintUseCaseOutput{resp.StatusCode, base64Fingerprint}, nil
+	return Output{resp.StatusCode, base64Fingerprint}, nil
 }
 
-func requireFingerprint(host string, port int, user, password, url string) (FBIGetHashFingerprintUseCaseOutput, error) {
+func digestRequest(host string, port int, user, password, url string) (Output, error) {
 	requireURL := fmt.Sprintf("http://%s:%s%s", host, strconv.Itoa(port), url)
 
 	//implementação para capturar a hash da digital do usuario
@@ -134,14 +153,14 @@ func requireFingerprint(host string, port int, user, password, url string) (FBIG
 	resp, err := client.Get(requireURL)
 
 	if err != nil {
-		return FBIGetHashFingerprintUseCaseOutput{0, err.Error()}, err
+		return Output{0, err.Error()}, err
 	}
 	if resp.StatusCode != 200 {
 		body, _ := io.ReadAll(resp.Body)
-		return FBIGetHashFingerprintUseCaseOutput{resp.StatusCode, string(body)}, err
+		return Output{resp.StatusCode, string(body)}, err
 	}
 	// log.Println("URL: ", requireURL, " CHAMADA")
 
 	defer resp.Body.Close()
-	return FBIGetHashFingerprintUseCaseOutput{resp.StatusCode, "OK"}, nil
+	return Output{resp.StatusCode, "OK"}, nil
 }

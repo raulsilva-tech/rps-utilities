@@ -24,4 +24,4 @@ cobra-cli add create -p 'categoryCmd'
 É necessário que a propriedade ONVIF Protect esteja ativada na camera a fim de que ela permita somente
 conexões autenticadas
 
- go run .\main.go fbi getFingerprint --user admin --password dankia77 --host 192.168.0.131 --port 80 --url "/cgi-bin/accessControl.cgi?action=captureFingerprint&info.ReaderID=1&info.FingerPrintName=Johnatan&info.UserID=2&heartbeat=5&timeout=10"
+ go run .\main.go fbi getFingerprint --user admin --password dankia77 --host 192.168.15.4 --port 80 --url "/cgi-bin/accessControl.cgi?action=captureFingerprint&info.ReaderID=1&info.FingerPrintName=Johnatan&info.UserID=2&heartbeat=5&timeout=10"

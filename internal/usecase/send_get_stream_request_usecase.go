@@ -17,8 +17,8 @@ type SendGETStreamRequestUseCaseOutput struct {
 	HTTPResponse string `json:"response"`
 }
 
-func NewSendGETStreamRequestUseCase() *SendGETRequestUseCase {
-	return &SendGETRequestUseCase{}
+func NewSendGETStreamRequestUseCase() *SendGETStreamRequestUseCase {
+	return &SendGETStreamRequestUseCase{}
 }
 
 func (uc *SendGETStreamRequestUseCase) Execute(url, user, password, auth string) (SendGETStreamRequestUseCaseOutput, error) {
@@ -78,7 +78,7 @@ func (uc *SendGETStreamRequestUseCase) Execute(url, user, password, auth string)
 	}
 
 	if err := scanner.Err(); err != nil {
-		return SendGETStreamRequestUseCaseOutput{0,  err.Error()}, err
+		return SendGETStreamRequestUseCaseOutput{0, err.Error()}, err
 	}
 
 	// fmt.Println("Response Status:", resp.Status)
