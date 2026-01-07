@@ -35,6 +35,7 @@ func init() {
 	fbiCmd.PersistentFlags().String("url", "", "Url")
 	fbiCmd.PersistentFlags().String("host", "", "IP do dispositivo")
 	fbiCmd.PersistentFlags().IntP("port", "p", 80, "Porta do dispositivo")
+	fbiCmd.PersistentFlags().IntP("timeout", "t", 30, "Tempo máximo para aguardar ação do usuário")
 	fbiCmd.PersistentFlags().String("user", "admin", "Usuário")
 	fbiCmd.PersistentFlags().String("password", "dankia77", "Senha")
 
