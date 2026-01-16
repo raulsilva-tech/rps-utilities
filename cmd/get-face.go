@@ -1,5 +1,5 @@
 /*
-Copyright © 2025 NAME HERE <EMAIL ADDRESS>
+Copyright © 2026 NAME HERE <EMAIL ADDRESS>
 */
 package cmd
 
@@ -11,9 +11,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// getFingerprintCmd represents the getFingerprint command
-var getFingerprintCmd = &cobra.Command{
-	Use:   "getFingerprint",
+// getFaceCmd represents the getFace command
+var getFaceCmd = &cobra.Command{
+	Use:   "get-face",
 	Short: "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
@@ -27,14 +27,15 @@ to quickly create a Cobra application.`,
 		url, _ := cmd.Flags().GetString("url")
 		host, _ := cmd.Flags().GetString("host")
 		port, _ := cmd.Flags().GetInt("port")
+		timeout, _ := cmd.Flags().GetInt("timeout")
 
-		if user == "" || password == "" || url == "" || host == "" || port == 0 {
-			fmt.Println("Error: Missing required flags (user, password, url, host)")
+		if user == "" || password == "" || host == "" || port == 0 || timeout == 0 {
+			fmt.Println("Error: Missing required flags (user, password, timeout, host)")
 			return
 		}
 
-		uc := usecase.NewFBIGetHashFingerprintUseCase()
-		output, _ := uc.Execute(host, port, user, password, url)
+		uc := usecase.NewFBIGetFaceUseCase()
+		output, _ := uc.Execute(host, port, user, password, url, timeout)
 		// if err != nil {
 		// 	fmt.Println("Error:", err)
 		// 	return
@@ -46,15 +47,15 @@ to quickly create a Cobra application.`,
 }
 
 func init() {
-	fbiCmd.AddCommand(getFingerprintCmd)
+	fbiCmd.AddCommand(getFaceCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// getFingerprintCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// getFaceCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// getFingerprintCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// getFaceCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

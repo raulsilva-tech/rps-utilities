@@ -13,7 +13,7 @@ APP_NAME := RPS-Utilities.exe
 ### RADXA
 # GOOS:= linux
 # GOARCH:= arm64
-# APP_NAME := DVRStreamAdapter-Arm
+# APP_NAME := RPS-Utilities-RAD
 
 ###
 
