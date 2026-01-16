@@ -6,9 +6,6 @@ package cmd
 import (
 	"fmt"
 	"log"
-	"os/exec"
-	"runtime"
-	"syscall"
 
 	"github.com/spf13/cobra"
 )
@@ -65,32 +62,6 @@ func execCommand() RunEFun {
 }
 
 func runDetachedWithLog(seconds int, task string) error {
-
-	var cmd *exec.Cmd
-
-	if runtime.GOOS == "windows" {
-
-		cmdLine := fmt.Sprintf(
-			`timeout /T %d /NOBREAK >NUL && %s`,
-			seconds, task,
-		)
-		cmd = exec.Command("cmd.exe", "/C", cmdLine)
-
-		// 🔹 Detach de verdade (processo independente)
-		cmd.SysProcAttr = &syscall.SysProcAttr{
-			CreationFlags: CREATE_NEW_PROCESS_GROUP | DETACHED_PROCESS,
-		}
-	} else {
-
-		cmdLine := fmt.Sprintf(
-			`nohup sh -c 'sleep %d && %s' &`,
-			seconds, task,
-		)
-		cmd = exec.Command("bash", "-c", cmdLine)
-	}
-
+	cmd := buildCommand(seconds, task)
 	return cmd.Start()
-	// output, _ := cmd.CombinedOutput()
-	// fmt.Println(string(output))
-	// return nil
 }
